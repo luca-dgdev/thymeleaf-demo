@@ -1,5 +1,6 @@
 package com.example.thymeleafdemo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
     
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -27,7 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin().permitAll()
             .and()
             .logout().permitAll()
-            .and().exceptionHandling().accessDeniedPage("/403.html");
+            .and()
+            .exceptionHandling().accessDeniedPage("/403.html")
+            .and()
+            .httpBasic().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint);
     }
 
     @Bean
