@@ -16,16 +16,18 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	@Autowired
-	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
+//	
+//	@Autowired
+//	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
 	
 	private static final Logger log = Logger.getLogger(WebSecurityConfig.class.getName());
     
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		
-		log.severe("googleAccountsAuthenticationEntryPoint: " + googleAccountsAuthenticationEntryPoint.toString());
+		log.info("configure info");
+		log.severe("configure severe");
+		//log.severe("googleAccountsAuthenticationEntryPoint: " + googleAccountsAuthenticationEntryPoint.toString());
 		
         http
             .authorizeRequests().antMatchers("/", "/index.html").permitAll()
@@ -39,8 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logout().permitAll()
             .and()
             .exceptionHandling().accessDeniedPage("/403.html")
-            .and()
-            .exceptionHandling().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint)
+            //.and()
+            //.exceptionHandling().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint)
             ;
     }
 
