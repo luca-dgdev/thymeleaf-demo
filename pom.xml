@@ -40,7 +40,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- GAE SPECIFIC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -59,6 +59,11 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>1.9.71</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -74,7 +79,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- GAE SPECIFIC -->
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
