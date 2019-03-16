@@ -34,7 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //            .and()
 //            .exceptionHandling().accessDeniedPage("/403.html")
             .and()
-            .httpBasic().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint);
+            .exceptionHandling().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint)
+            ;
     }
 
     @Bean

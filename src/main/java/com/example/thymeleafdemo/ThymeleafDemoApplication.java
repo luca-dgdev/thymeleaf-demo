@@ -17,7 +17,7 @@ public class ThymeleafDemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		log.info("ThymeleafDemoApplication started");
+		log.severe("ThymeleafDemoApplication started");
 		
 	}
 
