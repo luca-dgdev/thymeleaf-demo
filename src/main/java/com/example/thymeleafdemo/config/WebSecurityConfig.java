@@ -1,5 +1,7 @@
 package com.example.thymeleafdemo.config;
 
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +19,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
+	
+	private static final Logger log = Logger.getLogger(GoogleAccountsAuthenticationEntryPoint.class.getName());
     
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
+		
+		log.severe("googleAccountsAuthenticationEntryPoint: " + googleAccountsAuthenticationEntryPoint.toString());
 		
         http
             .authorizeRequests().antMatchers("/", "/index.html").permitAll()
