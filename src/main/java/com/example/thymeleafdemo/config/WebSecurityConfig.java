@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
 	
-	private static final Logger log = Logger.getLogger(GoogleAccountsAuthenticationEntryPoint.class.getName());
+	private static final Logger log = Logger.getLogger(WebSecurityConfig.class.getName());
     
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,12 +33,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers("/pagina1.html").access("hasRole('ROLE1')")
             .and()
             .authorizeRequests().antMatchers("/pagina2.html").access("hasRole('ROLE2')")
-//            .and()
-//            .formLogin().permitAll()
-//            .and()
-//            .logout().permitAll()
-//            .and()
-//            .exceptionHandling().accessDeniedPage("/403.html")
+            .and()
+            .formLogin().permitAll()
+            .and()
+            .logout().permitAll()
+            .and()
+            .exceptionHandling().accessDeniedPage("/403.html")
             .and()
             .exceptionHandling().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint)
             ;
