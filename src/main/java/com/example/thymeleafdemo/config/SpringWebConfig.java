@@ -54,6 +54,12 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
 		templateEngine.setEnableSpringELCompiler(true);
 		return templateEngine;
 	}
+	
+	@Bean
+	public GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint()
+	{
+		return new GoogleAccountsAuthenticationEntryPoint();
+	}
 
 	@Override
 	public void setApplicationContext(org.springframework.context.ApplicationContext applicationContext)
