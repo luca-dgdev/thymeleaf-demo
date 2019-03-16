@@ -25,4 +25,14 @@ public class WebController {
 	public String pagina1(Model model) {
 		return "pagina1";
 	}
+	
+	@GetMapping("/pagina2")
+	public String pagina2(Model model) {
+		return "pagina2";
+	}
+	
+	@GetMapping("/403")
+	public String notPermittedPage(Model model) {
+		return "403";
+	}
 }
