@@ -1,6 +1,7 @@
 package com.example.thymeleafdemo.config;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +14,13 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 public class GoogleAccountsAuthenticationEntryPoint implements AuthenticationEntryPoint {
+	
+	private static final Logger log = Logger.getLogger(GoogleAccountsAuthenticationEntryPoint.class.getName());
+	
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
+		log.info("commence");
 		UserService userService = UserServiceFactory.getUserService();
-
 		response.sendRedirect(userService.createLoginURL(request.getRequestURI()));
 	}
 }
