@@ -1,13 +1,32 @@
 package com.example.thymeleafdemo.controller;
 
+import java.util.EnumSet;
+import java.util.Set;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.thymeleafdemo.config.security.GaeUserAuthentication;
+import com.example.thymeleafdemo.constants.AppRole;
+import com.example.thymeleafdemo.dao.GaeUser;
+import com.example.thymeleafdemo.dao.UserRegistry;
 import com.example.thymeleafdemo.model.SimpleModel;
+import com.google.appengine.api.users.UserServiceFactory;
 
 @Controller
 public class WebController {
+	
+	@Autowired
+    private UserRegistry registry;
 
 //	@RequestMapping(value = { "/" })
 //	public String index() {
@@ -35,4 +54,29 @@ public class WebController {
 	public String notPermittedPage(Model model) {
 		return "403";
 	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+    public String register(@Valid RegistrationForm form, BindingResult result) {
+        if (result.hasErrors()) {
+            return null;
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        GaeUser currentUser = (GaeUser)authentication.getPrincipal();
+        Set<AppRole> roles = EnumSet.of(AppRole.USER);
+
+        if (UserServiceFactory.getUserService().isUserAdmin()) {
+            roles.add(AppRole.ADMIN);
+        }
+
+        GaeUser user = new GaeUser(currentUser.getUserId(), currentUser.getNickname(), currentUser.getEmail(),
+                form.getForename(), form.getSurname(), roles, true);
+
+        registry.registerUser(user);
+
+        // Update the context with the full authentication
+        SecurityContextHolder.getContext().setAuthentication(new GaeUserAuthentication(user, authentication.getDetails()));
+
+        return "redirect:/index.html";
+    }
 }

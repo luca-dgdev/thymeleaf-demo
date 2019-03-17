@@ -1,4 +1,4 @@
-package com.example.thymeleafdemo.config;
+package com.example.thymeleafdemo.config.security;
 
 import java.io.IOException;
 import java.util.logging.Logger;

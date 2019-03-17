@@ -13,6 +13,11 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import com.example.thymeleafdemo.config.security.GoogleAccountsAuthenticationEntryPoint;
+import com.example.thymeleafdemo.config.security.GoogleAccountsAuthenticationProvider;
+import com.example.thymeleafdemo.dao.GaeDatastoreUserRegistry;
+import com.example.thymeleafdemo.dao.UserRegistry;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan
@@ -56,9 +61,23 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
 	}
 	
 	@Bean
-	public GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint()
+	public GoogleAccountsAuthenticationEntryPoint gaeEntryPoint()
 	{
 		return new GoogleAccountsAuthenticationEntryPoint();
+	}
+	
+	@Bean
+	public UserRegistry userRegistry()
+	{
+		return new GaeDatastoreUserRegistry();
+	}
+	
+	@Bean
+	public GoogleAccountsAuthenticationProvider gaeAuthenticationProvider()
+	{
+		GoogleAccountsAuthenticationProvider googleAccountsAuthenticationProvider = new GoogleAccountsAuthenticationProvider();
+		googleAccountsAuthenticationProvider.setUserRegistry(applicationContext.getBean(UserRegistry.class));
+		return new GoogleAccountsAuthenticationProvider();
 	}
 
 	@Override
