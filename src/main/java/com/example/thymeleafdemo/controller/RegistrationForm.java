@@ -1,12 +1,12 @@
 package com.example.thymeleafdemo.controller;
 
-import com.example.thymeleafdemo.validation.Forename;
-import com.example.thymeleafdemo.validation.Surname;
+//import com.example.thymeleafdemo.validation.Forename;
+//import com.example.thymeleafdemo.validation.Surname;
 
 public class RegistrationForm {
-	@Forename
+	//@Forename
 	private String forename;
-	@Surname
+	//@Surname
 	private String surname;
 
 	public String getForename() {

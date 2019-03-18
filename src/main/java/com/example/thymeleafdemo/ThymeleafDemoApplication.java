@@ -2,6 +2,7 @@ package com.example.thymeleafdemo;
 
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,6 +15,9 @@ public class ThymeleafDemoApplication implements CommandLineRunner {
 
 	private static final Logger log = Logger.getLogger(ThymeleafDemoApplication.class.getName());
 	
+	@Value("${spring.jpa.properties.javax.persistence.validation.mode}")
+	private String jpaValidation;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ThymeleafDemoApplication.class, args);
 	}
@@ -21,7 +25,7 @@ public class ThymeleafDemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		log.severe("ThymeleafDemoApplication started");
-		
+		log.severe("spring.jpa.properties.javax.persistence.validation.mode: " + jpaValidation);
 	}
 
 }
