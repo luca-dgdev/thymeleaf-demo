@@ -1,6 +1,7 @@
 package com.example.thymeleafdemo.config.security;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,48 +26,57 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 
 public class GaeAuthenticationFilter extends GenericFilterBean {
-	  private static final String REGISTRATION_URL = "/register.htm";
-	  private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
-	  private AuthenticationManager authenticationManager;
-	  private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
-	  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	private static final Logger log = Logger.getLogger(GaeAuthenticationFilter.class.getName());
 
-	    if (authentication == null) {
-	      // User isn't authenticated. Check if there is a Google Accounts user
-	      User googleUser = UserServiceFactory.getUserService().getCurrentUser();
+	private static final String REGISTRATION_URL = "/register.htm";
+	private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
+	private AuthenticationManager authenticationManager;
+	private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
-	      if (googleUser != null) {
-	        // User has returned after authenticating through GAE. Need to authenticate to Spring Security.
-	        PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(googleUser, null);
-	        token.setDetails(ads.buildDetails(request));
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		
+		log.severe("GaeAuthenticationFilter.doFilter");
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-	        try {
-	          authentication = authenticationManager.authenticate(token);
-	          // Setup the security context
-	          SecurityContextHolder.getContext().setAuthentication(authentication);
-	          // Send new users to the registration page.
-	          if (authentication.getAuthorities().contains(AppRole.NEW_USER)) {
-	            ((HttpServletResponse) response).sendRedirect(REGISTRATION_URL);
-	              return;
-	          }
-	        } catch (AuthenticationException e) {
-	         // Authentication information was rejected by the authentication manager
-	          failureHandler.onAuthenticationFailure((HttpServletRequest)request, (HttpServletResponse)response, e);
-	          return;
-	        }
-	      }
-	    }
+		if (authentication == null) {
+			// User isn't authenticated. Check if there is a Google Accounts user
+			User googleUser = UserServiceFactory.getUserService().getCurrentUser();
 
-	    chain.doFilter(request, response);
-	  }
+			if (googleUser != null) {
+				// User has returned after authenticating through GAE. Need to authenticate to
+				// Spring Security.
+				PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(googleUser, null);
+				token.setDetails(ads.buildDetails(request));
 
-	  public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-	    this.authenticationManager = authenticationManager;
-	  }
+				try {
+					authentication = authenticationManager.authenticate(token);
+					// Setup the security context
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+					// Send new users to the registration page.
+					if (authentication.getAuthorities().contains(AppRole.NEW_USER)) {
+						((HttpServletResponse) response).sendRedirect(REGISTRATION_URL);
+						return;
+					}
+				} catch (AuthenticationException e) {
+					// Authentication information was rejected by the authentication manager
+					failureHandler.onAuthenticationFailure((HttpServletRequest) request, (HttpServletResponse) response,
+							e);
+					return;
+				}
+			}
+		}
 
-	  public void setFailureHandler(AuthenticationFailureHandler failureHandler) {
-	    this.failureHandler = failureHandler;
-	  }
+		chain.doFilter(request, response);
 	}
+
+	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
+	}
+
+	public void setFailureHandler(AuthenticationFailureHandler failureHandler) {
+		this.failureHandler = failureHandler;
+	}
+}
