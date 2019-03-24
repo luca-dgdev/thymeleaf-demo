@@ -82,7 +82,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
 		GoogleAccountsAuthenticationProvider googleAccountsAuthenticationProvider = new GoogleAccountsAuthenticationProvider();
 		googleAccountsAuthenticationProvider.setUserRegistry(applicationContext.getBean(UserRegistry.class));
 		log.severe("SpringWebConfig.userRegistry: " + applicationContext.getBean(UserRegistry.class));
-		return new GoogleAccountsAuthenticationProvider();
+		return googleAccountsAuthenticationProvider;
 	}
 
 	@Override
