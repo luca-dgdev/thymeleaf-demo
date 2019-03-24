@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -33,24 +32,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		log.severe("configure severe");
 		log.severe("googleAccountsAuthenticationEntryPoint: " + googleAccountsAuthenticationEntryPoint.toString());
 
+		GaeAuthenticationFilter gaeAuthenticationFilter = new GaeAuthenticationFilter();
+		gaeAuthenticationFilter.setAuthenticationManager(authenticationManager());
+
 		http.authorizeRequests().antMatchers("/", "/index.html").permitAll().and().authorizeRequests()
 				.antMatchers("/pagina1.html").access("hasRole('ROLE1')").and().authorizeRequests()
 				.antMatchers("/pagina2.html").access("hasRole('ROLE2')").and().formLogin().permitAll().and().logout()
 				.permitAll().and().exceptionHandling().accessDeniedPage("/403.html").and().exceptionHandling()
 				.authenticationEntryPoint(googleAccountsAuthenticationEntryPoint).and()
-				.addFilterAt(new GaeAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class);
+				.addFilterAt(gaeAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class);
 		;
 	}
 
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return new ProviderManager(Arrays.asList(new GoogleAccountsAuthenticationProvider()));
-	}
-
-	@Bean(name = "authenticationManager")
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
 	}
 
 //    @Bean

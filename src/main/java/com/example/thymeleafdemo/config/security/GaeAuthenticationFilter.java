@@ -10,8 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -34,8 +32,6 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 	private static final String REGISTRATION_URL = "/register.html";
 	private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
 
-	@Autowired
-	@Qualifier("authenticationManager")
 	private AuthenticationManager authenticationManager;
 	private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
