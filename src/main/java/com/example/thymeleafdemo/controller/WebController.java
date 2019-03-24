@@ -73,10 +73,10 @@ public class WebController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         GaeUser currentUser = (GaeUser)authentication.getPrincipal();
-        Set<AppRole> roles = EnumSet.of(AppRole.USER);
+        Set<AppRole> roles = EnumSet.of(AppRole.ROLE_USER);
 
         if (UserServiceFactory.getUserService().isUserAdmin()) {
-            roles.add(AppRole.ADMIN);
+            roles.add(AppRole.ROLE_ADMIN);
         }
 
         GaeUser user = new GaeUser(currentUser.getUserId(), currentUser.getNickname(), currentUser.getEmail(),

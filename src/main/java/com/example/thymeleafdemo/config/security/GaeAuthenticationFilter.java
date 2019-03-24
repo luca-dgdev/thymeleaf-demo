@@ -56,7 +56,7 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 					// Setup the security context
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 					// Send new users to the registration page.
-					if (authentication.getAuthorities().contains(AppRole.NEW_USER)) {
+					if (authentication.getAuthorities().contains(AppRole.ROLE_NEW_USER)) {
 						((HttpServletResponse) response).sendRedirect(REGISTRATION_URL);
 						return;
 					}
