@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -32,26 +33,29 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 
 	private static final String REGISTRATION_URL = "/register.html";
 	private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
-	
+
 	@Autowired
+	@Qualifier("authenticationManager")
 	private AuthenticationManager authenticationManager;
 	private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		
+
 		// PARTE A OGNI RICHIESTA
 		log.severe("GaeAuthenticationFilter.doFilter");
-		
+		log.severe("GaeAuthenticationFilter.authenticationManager: " + authenticationManager);
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
+
 		if (authentication == null) {
 			// User isn't authenticated. Check if there is a Google Accounts user
 			log.severe("User isn't authenticated. Check if there is a Google Accounts user");
 			User googleUser = UserServiceFactory.getUserService().getCurrentUser();
 
 			if (googleUser != null) {
-				log.severe("User has returned after authenticating through GAE. Need to authenticate to Spring Security.");
+				log.severe(
+						"User has returned after authenticating through GAE. Need to authenticate to Spring Security.");
 				// User has returned after authenticating through GAE. Need to authenticate to
 				// Spring Security.
 				PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(googleUser, null);
@@ -75,14 +79,10 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 							e);
 					return;
 				}
-			}
-			else
-			{
+			} else {
 				log.severe("googleUser is null");
 			}
-		}
-		else
-		{
+		} else {
 			log.severe("authentication is not null. Principal :" + authentication.getPrincipal());
 		}
 

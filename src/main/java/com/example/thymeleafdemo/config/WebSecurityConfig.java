@@ -20,43 +20,37 @@ import com.example.thymeleafdemo.config.security.GoogleAccountsAuthenticationPro
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
-	
+
 	private static final Logger log = Logger.getLogger(WebSecurityConfig.class.getName());
-    
+
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-		
+	protected void configure(HttpSecurity http) throws Exception {
+
 		log.info("configure info");
 		log.severe("configure severe");
 		log.severe("googleAccountsAuthenticationEntryPoint: " + googleAccountsAuthenticationEntryPoint.toString());
-		
-        http
-            .authorizeRequests().antMatchers("/", "/index.html").permitAll()
-            .and()
-            .authorizeRequests().antMatchers("/pagina1.html").access("hasRole('ROLE1')")
-            .and()
-            .authorizeRequests().antMatchers("/pagina2.html").access("hasRole('ROLE2')")
-            .and()
-            .formLogin().permitAll()
-            .and()
-            .logout().permitAll()
-            .and()
-            .exceptionHandling().accessDeniedPage("/403.html")
-            .and()
-            .exceptionHandling().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint)
-            .and()
-            .addFilterAt(
-                    new GaeAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class);
-            ;
-    }
-	
-	@Bean
+
+		http.authorizeRequests().antMatchers("/", "/index.html").permitAll().and().authorizeRequests()
+				.antMatchers("/pagina1.html").access("hasRole('ROLE1')").and().authorizeRequests()
+				.antMatchers("/pagina2.html").access("hasRole('ROLE2')").and().formLogin().permitAll().and().logout()
+				.permitAll().and().exceptionHandling().accessDeniedPage("/403.html").and().exceptionHandling()
+				.authenticationEntryPoint(googleAccountsAuthenticationEntryPoint).and()
+				.addFilterAt(new GaeAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class);
+		;
+	}
+
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
-	    return new ProviderManager(Arrays.asList(new GoogleAccountsAuthenticationProvider()));
+		return new ProviderManager(Arrays.asList(new GoogleAccountsAuthenticationProvider()));
+	}
+
+	@Bean(name = "authenticationManager")
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 //    @Bean
