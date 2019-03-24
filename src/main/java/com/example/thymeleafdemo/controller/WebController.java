@@ -65,6 +65,9 @@ public class WebController {
             return null;
         }
         
+        log.severe("form.forename: " + form.getForename());
+        log.severe("form.surname: " + form.getSurname());
+        
         log.severe("google user email: " + UserServiceFactory.getUserService().getCurrentUser().getEmail());
         log.severe("google userID: " + UserServiceFactory.getUserService().getCurrentUser().getUserId());
 
