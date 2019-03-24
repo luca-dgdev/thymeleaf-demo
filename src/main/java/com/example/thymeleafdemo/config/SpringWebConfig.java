@@ -1,5 +1,7 @@
 package com.example.thymeleafdemo.config;
 
+import java.util.logging.Logger;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -22,6 +24,8 @@ import com.example.thymeleafdemo.dao.UserRegistry;
 @EnableWebMvc
 @ComponentScan
 public class SpringWebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+	
+	private static final Logger log = Logger.getLogger(SpringWebConfig.class.getName());
 
 	private ApplicationContext applicationContext;
 
@@ -72,11 +76,12 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
 		return new GaeDatastoreUserRegistry();
 	}
 	
-	@Bean
+	@Bean(name = "gaeAuthenticationProvider")
 	public GoogleAccountsAuthenticationProvider gaeAuthenticationProvider()
 	{
 		GoogleAccountsAuthenticationProvider googleAccountsAuthenticationProvider = new GoogleAccountsAuthenticationProvider();
 		googleAccountsAuthenticationProvider.setUserRegistry(applicationContext.getBean(UserRegistry.class));
+		log.severe("SpringWebConfig.userRegistry: " + applicationContext.getBean(UserRegistry.class));
 		return new GoogleAccountsAuthenticationProvider();
 	}
 

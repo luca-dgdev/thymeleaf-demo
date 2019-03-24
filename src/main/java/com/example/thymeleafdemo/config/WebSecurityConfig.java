@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -24,6 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
 	
 	@Autowired
+	@Qualifier(value="gaeAuthenticationProvider")
 	private GoogleAccountsAuthenticationProvider googleAccountsAuthenticationProvider;
 
 	private static final Logger log = Logger.getLogger(WebSecurityConfig.class.getName());
