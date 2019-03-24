@@ -1,6 +1,7 @@
 package com.example.thymeleafdemo.dao;
 
 import java.io.Serializable;
+import java.util.EnumSet;
 import java.util.Set;
 
 import com.example.thymeleafdemo.constants.AppRole;
@@ -33,7 +34,7 @@ public class GaeUser implements Serializable {
 		this.nickname = nickname;
 		this.forename = "";
 		this.surname = "";
-		this.authorities = null;
+		this.authorities = EnumSet.of(AppRole.ROLE_NEW_USER);
 		this.enabled = true;
 	}
 

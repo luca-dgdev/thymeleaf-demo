@@ -31,7 +31,12 @@ public class GoogleAccountsAuthenticationProvider implements AuthenticationProvi
 
 		if (user == null) {
 			// User not in registry. Needs to register
+			log.severe("User not in registry. Needs to register");
 			user = new GaeUser(googleUser.getUserId(), googleUser.getNickname(), googleUser.getEmail());
+		}
+		else
+		{
+			log.severe("User found in registry.");
 		}
 
 		if (!user.isEnabled()) {
