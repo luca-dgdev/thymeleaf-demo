@@ -22,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
+	
+	@Autowired
+	private GoogleAccountsAuthenticationProvider googleAccountsAuthenticationProvider;
 
 	private static final Logger log = Logger.getLogger(WebSecurityConfig.class.getName());
 
@@ -46,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
-		return new ProviderManager(Arrays.asList(new GoogleAccountsAuthenticationProvider()));
+		return new ProviderManager(Arrays.asList(googleAccountsAuthenticationProvider));
 	}
 
 //    @Bean

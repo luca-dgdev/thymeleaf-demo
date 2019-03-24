@@ -52,6 +52,7 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 			if (googleUser != null) {
 				log.severe(
 						"User has returned after authenticating through GAE. Need to authenticate to Spring Security.");
+				log.severe("Google user.email: " + googleUser.getEmail() + " user.id: " + googleUser.getUserId());
 				// User has returned after authenticating through GAE. Need to authenticate to
 				// Spring Security.
 				PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(googleUser, null);
