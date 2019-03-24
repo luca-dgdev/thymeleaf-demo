@@ -2,6 +2,7 @@ package com.example.thymeleafdemo.controller;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.validation.Valid;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.thymeleafdemo.config.security.GaeUserAuthentication;
+import com.example.thymeleafdemo.config.security.GoogleAccountsAuthenticationEntryPoint;
 import com.example.thymeleafdemo.constants.AppRole;
 import com.example.thymeleafdemo.dao.GaeUser;
 import com.example.thymeleafdemo.dao.UserRegistry;
@@ -24,6 +26,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @Controller
 public class WebController {
+	
+	private static final Logger log = Logger.getLogger(WebController.class.getName());
 	
 	@Autowired
     private UserRegistry registry;
@@ -60,6 +64,9 @@ public class WebController {
         if (result.hasErrors()) {
             return null;
         }
+        
+        log.severe("google user email: " + UserServiceFactory.getUserService().getCurrentUser().getEmail());
+        log.severe("google userID: " + UserServiceFactory.getUserService().getCurrentUser().getUserId());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         GaeUser currentUser = (GaeUser)authentication.getPrincipal();
