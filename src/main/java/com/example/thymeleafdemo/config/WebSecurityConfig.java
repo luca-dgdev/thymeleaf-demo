@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -52,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             ;
     }
 	
+	@Bean
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 	    return new ProviderManager(Arrays.asList(new GoogleAccountsAuthenticationProvider()));

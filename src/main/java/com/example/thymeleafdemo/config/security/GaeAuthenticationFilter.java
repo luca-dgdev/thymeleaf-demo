@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,8 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 
 	private static final String REGISTRATION_URL = "/register.html";
 	private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
+	
+	@Autowired
 	private AuthenticationManager authenticationManager;
 	private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
@@ -41,7 +44,7 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 		log.severe("GaeAuthenticationFilter.doFilter");
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+		
 		if (authentication == null) {
 			// User isn't authenticated. Check if there is a Google Accounts user
 			log.severe("User isn't authenticated. Check if there is a Google Accounts user");
