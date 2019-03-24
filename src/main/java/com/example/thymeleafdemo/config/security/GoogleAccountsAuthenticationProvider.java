@@ -1,5 +1,7 @@
 package com.example.thymeleafdemo.config.security;
 
+import java.util.logging.Logger;
+
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
@@ -11,9 +13,15 @@ import com.example.thymeleafdemo.dao.UserRegistry;
 import com.google.appengine.api.users.User;
 
 public class GoogleAccountsAuthenticationProvider implements AuthenticationProvider {
+	
+	private static final Logger log = Logger.getLogger(GoogleAccountsAuthenticationProvider.class.getName());
+	
 	private UserRegistry userRegistry;
 
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		
+		log.severe("GoogleAccountsAuthenticationProvider.authenticate");
+		
 		User googleUser = (User) authentication.getPrincipal();
 
 		GaeUser user = userRegistry.findUser(googleUser.getUserId());
@@ -31,6 +39,7 @@ public class GoogleAccountsAuthenticationProvider implements AuthenticationProvi
 	}
 
 	public final boolean supports(Class<?> authentication) {
+		log.severe("GoogleAccountsAuthenticationProvider.supports");
 		return PreAuthenticatedAuthenticationToken.class.isAssignableFrom(authentication);
 	}
 
