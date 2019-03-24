@@ -20,6 +20,7 @@ public class GoogleAccountsAuthenticationProvider implements AuthenticationProvi
 
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
+		// NON PARTE
 		log.severe("GoogleAccountsAuthenticationProvider.authenticate");
 		
 		User googleUser = (User) authentication.getPrincipal();

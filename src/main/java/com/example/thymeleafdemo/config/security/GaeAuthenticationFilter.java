@@ -37,15 +37,18 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
+		// PARTE A OGNI RICHIESTA
 		log.severe("GaeAuthenticationFilter.doFilter");
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication == null) {
 			// User isn't authenticated. Check if there is a Google Accounts user
+			log.severe("User isn't authenticated. Check if there is a Google Accounts user");
 			User googleUser = UserServiceFactory.getUserService().getCurrentUser();
 
 			if (googleUser != null) {
+				log.severe("User has returned after authenticating through GAE. Need to authenticate to Spring Security.");
 				// User has returned after authenticating through GAE. Need to authenticate to
 				// Spring Security.
 				PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(googleUser, null);
@@ -54,19 +57,30 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 				try {
 					authentication = authenticationManager.authenticate(token);
 					// Setup the security context
+					log.severe("Setup the security context");
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 					// Send new users to the registration page.
 					if (authentication.getAuthorities().contains(AppRole.ROLE_NEW_USER)) {
+						log.severe("Send new users to the registration page.");
 						((HttpServletResponse) response).sendRedirect(REGISTRATION_URL);
 						return;
 					}
 				} catch (AuthenticationException e) {
+					log.severe("Authentication information was rejected by the authentication manager");
 					// Authentication information was rejected by the authentication manager
 					failureHandler.onAuthenticationFailure((HttpServletRequest) request, (HttpServletResponse) response,
 							e);
 					return;
 				}
 			}
+			else
+			{
+				log.severe("googleUser is null");
+			}
+		}
+		else
+		{
+			log.severe("authentication is not null. Principal :" + authentication.getPrincipal());
 		}
 
 		chain.doFilter(request, response);
