@@ -24,6 +24,8 @@ public class GoogleAccountsAuthenticationProvider implements AuthenticationProvi
 		log.severe("GoogleAccountsAuthenticationProvider.authenticate");
 		
 		User googleUser = (User) authentication.getPrincipal();
+		log.severe("GoogleAccountsAuthenticationProvider.googleUser: " + googleUser);
+		log.severe("GoogleAccountsAuthenticationProvider.userRegistry: " + userRegistry);
 
 		GaeUser user = userRegistry.findUser(googleUser.getUserId());
 
