@@ -29,7 +29,7 @@ public class GaeAuthenticationFilter extends GenericFilterBean {
 
 	private static final Logger log = Logger.getLogger(GaeAuthenticationFilter.class.getName());
 
-	private static final String REGISTRATION_URL = "/register.htm";
+	private static final String REGISTRATION_URL = "/register.html";
 	private AuthenticationDetailsSource ads = new WebAuthenticationDetailsSource();
 	private AuthenticationManager authenticationManager;
 	private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
