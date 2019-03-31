@@ -3,6 +3,8 @@ package com.example.thymeleafdemo.controller;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.thymeleafdemo.dao.UserRegistry;
 import com.example.thymeleafdemo.model.SimpleModel;
 import com.example.thymeleafdemo.model.UserRegistration;
+import com.google.appengine.api.users.UserServiceFactory;
 
 @Controller
 public class WebController {
@@ -19,10 +22,8 @@ public class WebController {
 	@Autowired
 	private UserRegistry registry;
 
-//	@RequestMapping(value = { "/" })
-//	public String index() {
-//		return "index";
-//	}
+	@Autowired
+	private ConfigurableEnvironment env;
 
 	@GetMapping("/")
 	public String greeting(Model model) {
@@ -44,6 +45,11 @@ public class WebController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		model.addAttribute("userRegistration", new UserRegistration());
+
+		if (env.acceptsProfiles(Profiles.of("!dev")) && UserServiceFactory.getUserService().getCurrentUser() == null) {
+			return "403";
+		}
+
 		return "register";
 	}
 
