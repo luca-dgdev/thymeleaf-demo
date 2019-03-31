@@ -3,7 +3,7 @@ package com.example.thymeleafdemo.constants;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum AppRole implements GrantedAuthority {
-	ROLE_ADMIN(0), ROLE_NEW_USER(1), ROLE_USER(2), ROLE1(3), ROLE2(4);
+	ROLE_ADMIN(0), ROLE_NEW_USER(1), ROLE_USER(2);
 
 	private int bit;
 

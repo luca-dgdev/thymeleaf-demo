@@ -45,7 +45,7 @@ public class RegistrationController {
         GaeUser currentUser;
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Set<AppRole> roles = EnumSet.of(AppRole.ROLE_USER, AppRole.ROLE1);
+        Set<AppRole> roles = EnumSet.of(AppRole.ROLE_USER);
         
         if(env.acceptsProfiles(Profiles.of("dev")))
         {
