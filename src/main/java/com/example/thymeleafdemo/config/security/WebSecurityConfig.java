@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http
 		.authorizeRequests().antMatchers("/", "/index.html", "/register.html").permitAll().and()
-		.authorizeRequests().antMatchers("/pagina1.html").access("hasRole('ROLE_USER')").and()
+		.authorizeRequests().antMatchers("/pagina1.html").access("hasRole('ROLE_PAG1')").and()
 		.authorizeRequests().antMatchers("/pagina2.html").access("hasRole('ROLE2')").and()
 		.formLogin().permitAll().and()
 		.logout().permitAll().and()
