@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.thymeleafdemo.dao.UserRegistry;
 import com.example.thymeleafdemo.model.SimpleModel;
+import com.example.thymeleafdemo.model.UserRegistration;
 
 @Controller
 public class WebController {
@@ -38,6 +39,12 @@ public class WebController {
 	@GetMapping("/pagina2")
 	public String pagina2(Model model) {
 		return "pagina2";
+	}
+
+	@GetMapping("/register")
+	public String register(Model model) {
+		model.addAttribute("userRegistration", new UserRegistration());
+		return "register";
 	}
 
 	@GetMapping("/403")

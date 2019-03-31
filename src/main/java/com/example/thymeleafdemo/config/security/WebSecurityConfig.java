@@ -1,4 +1,4 @@
-package com.example.thymeleafdemo.config;
+package com.example.thymeleafdemo.config.security;
 
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -13,19 +13,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
-import com.example.thymeleafdemo.config.security.GaeAuthenticationFilter;
-import com.example.thymeleafdemo.config.security.GoogleAccountsAuthenticationEntryPoint;
-import com.example.thymeleafdemo.config.security.GoogleAccountsAuthenticationProvider;
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private GoogleAccountsAuthenticationEntryPoint googleAccountsAuthenticationEntryPoint;
-	
+
 	@Autowired
-	@Qualifier(value="gaeAuthenticationProvider")
+	@Qualifier(value = "gaeAuthenticationProvider")
 	private GoogleAccountsAuthenticationProvider googleAccountsAuthenticationProvider;
 
 	private static final Logger log = Logger.getLogger(WebSecurityConfig.class.getName());
@@ -40,13 +36,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		GaeAuthenticationFilter gaeAuthenticationFilter = new GaeAuthenticationFilter();
 		gaeAuthenticationFilter.setAuthenticationManager(authenticationManager());
 
-		http.authorizeRequests().antMatchers("/", "/index.html").permitAll().and().authorizeRequests()
-				.antMatchers("/pagina1.html").access("hasRole('ROLE1')").and().authorizeRequests()
-				.antMatchers("/pagina2.html").access("hasRole('ROLE2')").and().formLogin().permitAll().and().logout()
-				.permitAll().and().exceptionHandling().accessDeniedPage("/403.html").and().exceptionHandling()
-				.authenticationEntryPoint(googleAccountsAuthenticationEntryPoint).and()
-				.addFilterAt(gaeAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class);
-		;
+		// @formatter:off
+		http
+		.authorizeRequests().antMatchers("/", "/index.html", "/register.html").permitAll().and()
+		.authorizeRequests().antMatchers("/pagina1.html").access("hasRole('ROLE1')").and()
+		.authorizeRequests().antMatchers("/pagina2.html").access("hasRole('ROLE2')").and()
+		.formLogin().permitAll().and()
+		.logout().permitAll().and()
+		.exceptionHandling().accessDeniedPage("/403.html").and()
+		.exceptionHandling().authenticationEntryPoint(googleAccountsAuthenticationEntryPoint).and()
+		.addFilterAt(gaeAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class);
+		// @formatter:on
 	}
 
 	@Override

@@ -16,9 +16,23 @@
 	</div>
 
 	<div>
-		<h1>Pagina 1</h1>
-		<a href="/">index
-			</h2>
+		<form action="#" th:action="@{/registeruser}"
+			th:object="${userRegistration}" method="post">
+			
+			<div class="submit">
+				<div>
+					<label>forename</label>
+					<input type="text" th:field="*{forename}" />
+				</div>
+				<div>
+					<label>surname</label>
+					<input type="text" th:field="*{surname}" />
+				</div>
+				<div>
+					<button type="submit" name="register">Registrati</button>
+				</div>
+			</div>
+		</form>
 	</div>
 
 </body>
