@@ -5,12 +5,14 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Profiles;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.thymeleafdemo.dao.GaeUser;
 import com.example.thymeleafdemo.dao.UserRegistry;
-import com.example.thymeleafdemo.model.SimpleModel;
 import com.example.thymeleafdemo.model.UserRegistration;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -27,8 +29,14 @@ public class WebController {
 
 	@GetMapping("/")
 	public String greeting(Model model) {
-		model.addAttribute("simpleModel", new SimpleModel(1L, "pippo"));
-		model.addAttribute("nome", "paperino");
+		String nickname = "NON AUTENTICATO";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() != null
+				&& authentication.getPrincipal() instanceof GaeUser) {
+			GaeUser principal = (GaeUser) authentication.getPrincipal();
+			nickname = principal.getNickname();
+		}
+		model.addAttribute("nickname", nickname);
 		return "index";
 	}
 
