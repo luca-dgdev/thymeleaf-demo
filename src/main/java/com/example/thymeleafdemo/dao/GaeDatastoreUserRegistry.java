@@ -1,24 +1,17 @@
 package com.example.thymeleafdemo.dao;
 
-import java.util.Collection;
-import java.util.Set;
 import java.util.logging.Logger;
 
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.thymeleafdemo.constants.AppRole;
-import com.example.thymeleafdemo.utils.Utils;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
-
 public class GaeDatastoreUserRegistry implements UserRegistry {
+	
+	@Autowired 
+	private ObjectifyFactory objectifyFactory;
 
 	private static final Logger log = Logger.getLogger(GaeDatastoreUserRegistry.class.getName());
 	
@@ -37,7 +30,7 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 
 	public GaeUser findUser(String userId) {
 		
-		return ofy().load().type(GaeUser.class).id(userId).now();
+		return objectifyFactory.begin().load().type(GaeUser.class).id(userId).now();
 		
 //		Key key = KeyFactory.createKey(USER_TYPE, userId);
 //		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -61,7 +54,7 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 	}
 
 	public void registerUser(GaeUser newUser) {
-		ofy().save().entity(newUser).now();
+		objectifyFactory.begin().save().entity(newUser).now();
 		
 //		Key key = KeyFactory.createKey(USER_TYPE, newUser.getUserId());
 //		Entity user = new Entity(key);
@@ -82,8 +75,9 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 	}
 
 	public void removeUser(String userId) {
-		GaeUser gaeUser = ofy().load().type(GaeUser.class).id(userId).now();
-		ofy().delete().entity(gaeUser);
+		Objectify ofy = objectifyFactory.begin();
+		GaeUser gaeUser = ofy.load().type(GaeUser.class).id(userId).now();
+		ofy.delete().entity(gaeUser);
 //		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 //		Key key = KeyFactory.createKey(USER_TYPE, userId);
 //
