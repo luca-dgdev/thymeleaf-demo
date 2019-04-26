@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.example.thymeleafdemo.dao.GaeUser;
+import com.example.thymeleafdemo.utils.Utils;
 
 public class GaeUserAuthentication implements Authentication {
 	private final GaeUser principal;
@@ -20,7 +21,7 @@ public class GaeUserAuthentication implements Authentication {
 	}
 
 	public Collection<GrantedAuthority> getAuthorities() {
-		return new HashSet<>(principal.getAuthorities());
+		return new HashSet<>(Utils.getAuthoritiesFromBinary(principal.getBinaryAuthorities()));
 	}
 
 	public Object getCredentials() {

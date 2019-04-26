@@ -64,6 +64,11 @@
 			<artifactId>appengine-api-1.0-sdk</artifactId>
 			<version>1.9.71</version>
 		</dependency>
+		<dependency>
+			<groupId>com.googlecode.objectify</groupId>
+			<artifactId>objectify</artifactId>
+			<version>6.0.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

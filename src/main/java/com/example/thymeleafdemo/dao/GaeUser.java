@@ -1,21 +1,25 @@
 package com.example.thymeleafdemo.dao;
 
-import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.Set;
 
 import com.example.thymeleafdemo.constants.AppRole;
+import com.example.thymeleafdemo.utils.Utils;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
-public class GaeUser implements Serializable {
-	private final String userId;
-	private final String email;
-	private final String nickname;
-	private final String forename;
-	private final String surname;
-	private final Set<AppRole> authorities;
-	private final boolean enabled;
+@Entity
+public class GaeUser {
+	@Id
+	String userId;
+	String email;
+	String nickname;
+	String forename;
+	String surname;
+	long binaryAuthorities;
+	boolean enabled;
 
-	public GaeUser(String userId, String nickname, String email, String forename, String surname, Set<AppRole> roles,
+	public GaeUser(String userId, String nickname, String email, String forename, String surname, long binaryAuthorities,
 			boolean userEnabled) {
 		super();
 		this.userId = userId;
@@ -23,7 +27,7 @@ public class GaeUser implements Serializable {
 		this.nickname = nickname;
 		this.forename = forename;
 		this.surname = surname;
-		this.authorities = roles;
+		this.binaryAuthorities = binaryAuthorities;
 		this.enabled = userEnabled;
 	}
 
@@ -34,7 +38,7 @@ public class GaeUser implements Serializable {
 		this.nickname = nickname;
 		this.forename = "";
 		this.surname = "";
-		this.authorities = EnumSet.of(AppRole.ROLE_NEW_USER);
+		this.binaryAuthorities = Utils.calculateBinaryAuthorities(EnumSet.of(AppRole.ROLE_NEW_USER));
 		this.enabled = true;
 	}
 
@@ -58,8 +62,12 @@ public class GaeUser implements Serializable {
 		return surname;
 	}
 
-	public Set<AppRole> getAuthorities() {
-		return authorities;
+	public void setBinaryAuthorities(long binaryAuthorities) {
+		this.binaryAuthorities = binaryAuthorities;
+	}
+
+	public long getBinaryAuthorities() {
+		return binaryAuthorities;
 	}
 
 	public boolean isEnabled() {

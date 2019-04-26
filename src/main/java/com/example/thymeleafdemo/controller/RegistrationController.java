@@ -18,6 +18,7 @@ import com.example.thymeleafdemo.constants.AppRole;
 import com.example.thymeleafdemo.dao.GaeUser;
 import com.example.thymeleafdemo.dao.UserRegistry;
 import com.example.thymeleafdemo.model.UserRegistration;
+import com.example.thymeleafdemo.utils.Utils;
 import com.google.appengine.api.users.UserServiceFactory;
 
 @Controller
@@ -52,7 +53,7 @@ public class RegistrationController {
         	log.severe("dev profile -> activating stub values");
         	email = "test@thymeleaf-demo.com";
         	userId = "1";
-        	currentUser = new GaeUser(userId, null, email, null, null, null, true);
+        	currentUser = new GaeUser(userId, null, email, null, null, 0, true);
         }
         else
         {
@@ -69,7 +70,7 @@ public class RegistrationController {
         log.severe("google userID: " + userId);
 
 		GaeUser user = new GaeUser(currentUser.getUserId(), currentUser.getNickname(), currentUser.getEmail(),
-				userRegistration.getForename(), userRegistration.getSurname(), roles, true);
+				userRegistration.getForename(), userRegistration.getSurname(), Utils.calculateBinaryAuthorities(roles), true);
 
 		registry.registerUser(user);
 
