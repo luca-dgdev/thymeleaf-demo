@@ -14,12 +14,18 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.googlecode.objectify.ObjectifyService;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public class GaeDatastoreUserRegistry implements UserRegistry {
 
 	private static final Logger log = Logger.getLogger(GaeDatastoreUserRegistry.class.getName());
+	
+	public GaeDatastoreUserRegistry() {
+		super();
+		ObjectifyService.init();
+	}
 	
 	private static final String USER_TYPE = "GaeUser";
 	private static final String USER_FORENAME = "forename";
