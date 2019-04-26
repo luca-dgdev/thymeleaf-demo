@@ -19,6 +19,10 @@ public class GaeUser {
 	long binaryAuthorities;
 	boolean enabled;
 
+	public GaeUser() {
+		super();
+	}
+
 	public GaeUser(String userId, String nickname, String email, String forename, String surname, long binaryAuthorities,
 			boolean userEnabled) {
 		super();
