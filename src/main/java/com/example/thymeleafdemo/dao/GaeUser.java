@@ -1,7 +1,7 @@
 package com.example.thymeleafdemo.dao;
 
+import java.io.Serializable;
 import java.util.EnumSet;
-import java.util.Set;
 
 import com.example.thymeleafdemo.constants.AppRole;
 import com.example.thymeleafdemo.utils.Utils;
@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 @Entity
-public class GaeUser {
+public class GaeUser implements Serializable{
 	@Id
 	String userId;
 	String email;
