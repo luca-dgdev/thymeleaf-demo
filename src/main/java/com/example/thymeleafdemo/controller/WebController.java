@@ -55,6 +55,7 @@ public class WebController {
 		model.addAttribute("userRegistration", new UserRegistration());
 
 		if (env.acceptsProfiles(Profiles.of("!dev")) && UserServiceFactory.getUserService().getCurrentUser() == null) {
+			log.severe("register not allowed for user not authenticated with google");
 			return "403";
 		}
 

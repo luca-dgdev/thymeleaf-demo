@@ -9,3 +9,7 @@
 ## Admin dev console
 <http://localhost:8080/_ah/admin/datastore>
 
+## Objectify Spring Boot
+<https://github.com/Shilendra/objectify-appengine-spring>
+
+<https://github.com/objectify/objectify/wiki>

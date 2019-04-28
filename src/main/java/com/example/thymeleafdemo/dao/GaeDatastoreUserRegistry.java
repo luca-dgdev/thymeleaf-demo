@@ -30,7 +30,7 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 
 	public GaeUser findUser(String userId) {
 		
-		return objectifyFactory.begin().load().type(GaeUser.class).id(userId).now();
+		return objectifyFactory.ofy().load().type(GaeUser.class).id(userId).now();
 		
 //		Key key = KeyFactory.createKey(USER_TYPE, userId);
 //		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -54,7 +54,8 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 	}
 
 	public void registerUser(GaeUser newUser) {
-		objectifyFactory.begin().save().entity(newUser).now();
+		log.severe("saving GaeUser on Datastore");
+		objectifyFactory.ofy().save().entity(newUser).now();
 		
 //		Key key = KeyFactory.createKey(USER_TYPE, newUser.getUserId());
 //		Entity user = new Entity(key);
@@ -75,7 +76,7 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 	}
 
 	public void removeUser(String userId) {
-		Objectify ofy = objectifyFactory.begin();
+		Objectify ofy = objectifyFactory.ofy();
 		GaeUser gaeUser = ofy.load().type(GaeUser.class).id(userId).now();
 		ofy.delete().entity(gaeUser);
 //		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
