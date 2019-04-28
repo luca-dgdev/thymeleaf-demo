@@ -1,17 +1,17 @@
 package com.example.thymeleafdemo.dao;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 import java.util.logging.Logger;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyFactory;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Work;
 
 public class GaeDatastoreUserRegistry implements UserRegistry {
 	
-	@Autowired 
-	private ObjectifyFactory objectifyFactory;
+	//@Autowired 
+	//private ObjectifyFactory objectifyFactory;
 
 	private static final Logger log = Logger.getLogger(GaeDatastoreUserRegistry.class.getName());
 	
@@ -29,8 +29,16 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 	private static final String USER_AUTHORITIES = "authorities";
 
 	public GaeUser findUser(String userId) {
+		GaeUser gaeUser = ObjectifyService.run(new Work<GaeUser>() {
+            @Override
+            public GaeUser run() {
+            	GaeUser gaeUser = ofy().load().type(GaeUser.class).id(userId).now();
+				return gaeUser;
+            }
+        });
+		return gaeUser;
 		
-		return objectifyFactory.ofy().load().type(GaeUser.class).id(userId).now();
+		//return objectifyFactory.ofy().load().type(GaeUser.class).id(userId).now();
 		
 //		Key key = KeyFactory.createKey(USER_TYPE, userId);
 //		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -54,8 +62,15 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 	}
 
 	public void registerUser(GaeUser newUser) {
+		ObjectifyService.run(new Work<Key>() {
+            @Override
+            public Key run() {
+            	Key<GaeUser> now = ofy().save().entity(newUser).now();
+				return now;
+            }
+        });
 		log.severe("saving GaeUser on Datastore");
-		objectifyFactory.ofy().save().entity(newUser).now();
+		//objectifyFactory.ofy().save().entity(newUser).now();
 		
 //		Key key = KeyFactory.createKey(USER_TYPE, newUser.getUserId());
 //		Entity user = new Entity(key);
@@ -76,9 +91,17 @@ public class GaeDatastoreUserRegistry implements UserRegistry {
 	}
 
 	public void removeUser(String userId) {
-		Objectify ofy = objectifyFactory.ofy();
-		GaeUser gaeUser = ofy.load().type(GaeUser.class).id(userId).now();
-		ofy.delete().entity(gaeUser);
+		ObjectifyService.run(new Work<GaeUser>() {
+            @Override
+            public GaeUser run() {
+            	GaeUser gaeUser = ofy().load().type(GaeUser.class).id(userId).now();
+            	ofy().delete().entity(gaeUser);
+				return gaeUser;
+            }
+        });
+		//Objectify ofy = objectifyFactory.ofy();
+		//GaeUser gaeUser = ofy.load().type(GaeUser.class).id(userId).now();
+		//ofy.delete().entity(gaeUser);
 //		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 //		Key key = KeyFactory.createKey(USER_TYPE, userId);
 //
